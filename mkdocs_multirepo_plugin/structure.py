@@ -245,8 +245,8 @@ class DocsRepo(Repo):
         parts = len(edit_uri_parts)
         if parts > 1 and edit_uri_parts[1] == "master" and self.branch != "master":
             edit_uri_parts[1] = self.branch
-        if parts > 2 and edit_uri_parts[2] == "docs":
-            del edit_uri_parts[2]
+        # if parts > 2 and edit_uri_parts[2] == "docs":
+        #     del edit_uri_parts[2]
         edit_uri = "/".join(part for part in edit_uri_parts)
         return edit_uri + ("/" if edit_uri else "")
 
