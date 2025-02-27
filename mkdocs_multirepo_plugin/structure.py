@@ -251,7 +251,19 @@ class DocsRepo(Repo):
         # if parts > 2 and edit_uri_parts[2] == "docs":
         #     del edit_uri_parts[2]
         edit_uri = "/".join(part for part in edit_uri_parts)
-        return edit_uri + ("/" if edit_uri else "")
+
+        edit_uri = edit_uri + ("/" if edit_uri else "")
+
+        # Patch for Azure DevOps wiki repo
+        # if edit_uri is for devops repo which we can idenfify by the presence of
+        # %3f for `?` and %3d `=` usage in edit_uri
+        if r"%3f" in edit_uri and r"%3d" in edit_uri:
+            edit_uri = edit_uri.replace(r"%3f", r"&").replace(r"%3d", r"=")
+            # example edit_uri for devops repo
+            # https://dev.azure.com/username/project/_git/repo/_wiki/wikis/repo.wiki/1/docs/Index.md?path=docs/Index.md
+            edit_uri = (f"?version=GB{self.branch}" if edit_uri else "") + edit_uri
+
+        return edit_uri
 
     def __init__(
         self,
